@@ -9,7 +9,7 @@ import "./lib/AddrSet.sol";
 
 // KYC implements "Know Your Customer" storage for identity approvals by KYC providers.
 contract KYC is Owned {
-    
+
     // Status corresponding to the state of approvement:
     // * Unknown when an address has not been processed yet;
     // * Approved when an address has been approved by contract owner or 3rd party KYC provider;
@@ -22,10 +22,10 @@ contract KYC is Owned {
     }
 
     // Events emitted by this contract
-    event ProviderAdded(address addr);
-    event ProviderRemoved(address addr);
-    event AddrApproved(address addr, address indexed by);
-    event AddrSuspended(address addr, address indexed by);
+    event ProviderAdded(address indexed addr);
+    event ProviderRemoved(address indexed addr);
+    event AddrApproved(address indexed addr, address indexed by);
+    event AddrSuspended(address indexed addr, address indexed by);
 
     // Contract state
     AddrSet.Data kycProviders;
@@ -34,13 +34,13 @@ contract KYC is Owned {
     // registerProvider adds a new 3rd-party provider that is authorized to perform KYC.
     function registerProvider(address addr) public onlyOwner {
         require(AddrSet.insert(kycProviders, addr));
-        ProviderAdded(addr);
+        emit ProviderAdded(addr);
     }
 
     // removeProvider removes a 3rd-party provider that was authorized to perform KYC.
     function removeProvider(address addr) public onlyOwner {
         require(AddrSet.remove(kycProviders, addr));
-        ProviderRemoved(addr);
+        emit ProviderRemoved(addr);
     }
 
     // getStatus returns the KYC status for a given address.
@@ -54,7 +54,7 @@ contract KYC is Owned {
         Status status = kycStatus[addr];
         require(status != Status.approved);
         kycStatus[addr] = Status.approved;
-        AddrApproved(addr, msg.sender);
+        emit AddrApproved(addr, msg.sender);
     }
 
     // suspendAddr sets the address status to Suspended, see Status for details.
@@ -63,7 +63,7 @@ contract KYC is Owned {
         Status status = kycStatus[addr];
         require(status != Status.suspended);
         kycStatus[addr] = Status.suspended;
-        AddrSuspended(addr, msg.sender);
+        emit AddrSuspended(addr, msg.sender);
     }
 
     // onlyAuthorized modifier restricts write access to contract owner and authorized KYC providers.

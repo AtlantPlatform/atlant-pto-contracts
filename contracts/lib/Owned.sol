@@ -3,7 +3,7 @@ pragma solidity ^0.4.20; // nice
 contract Owned {
     address public owner;
 
-    function Owned() public {
+    constructor() public {
         owner = msg.sender;
     }
 
