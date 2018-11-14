@@ -1,6 +1,8 @@
-pragma solidity ^0.4.20; // nice
+pragma solidity ^0.4.24;
+
 
 contract Owned {
+    
     address public owner;
 
     constructor() public {

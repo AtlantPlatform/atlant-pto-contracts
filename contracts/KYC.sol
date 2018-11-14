@@ -2,10 +2,11 @@
 // Use of this source code is governed by Microsoft Reference Source
 // License (MS-RSL) that can be found in the LICENSE file.
 
-pragma solidity ^0.4.20; // nice
+pragma solidity ^0.4.24;
 
 import "./lib/Owned.sol";
 import "./lib/AddrSet.sol";
+
 
 // KYC implements "Know Your Customer" storage for identity approvals by KYC providers.
 contract KYC is Owned {
@@ -28,7 +29,7 @@ contract KYC is Owned {
     event AddrSuspended(address indexed addr, address indexed by);
 
     // Contract state
-    AddrSet.Data kycProviders;
+    AddrSet.Data private kycProviders;
     mapping(address => Status) public kycStatus;
 
     // registerProvider adds a new 3rd-party provider that is authorized to perform KYC.
@@ -44,7 +45,7 @@ contract KYC is Owned {
     }
 
     // getStatus returns the KYC status for a given address.
-    function getStatus(address addr) public constant returns (Status) {
+    function getStatus(address addr) public view returns (Status) {
         return kycStatus[addr];
     }
 

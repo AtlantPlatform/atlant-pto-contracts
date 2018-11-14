@@ -5,4 +5,4 @@ compile:
 
 lint:
 	solhint "contracts/**/*.sol"
-	solium -d contracts/
+	# disabled:solium -d contracts/
