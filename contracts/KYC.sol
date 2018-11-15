@@ -44,6 +44,11 @@ contract KYC is Owned {
         emit ProviderRemoved(addr);
     }
 
+    // isProvider returns true if the given address was authorized to perform KYC.
+    function isProvider(address addr) public view returns (bool) {
+        return addr == owner || AddrSet.contains(kycProviders, addr);
+    }
+
     // getStatus returns the KYC status for a given address.
     function getStatus(address addr) public view returns (Status) {
         return kycStatus[addr];
