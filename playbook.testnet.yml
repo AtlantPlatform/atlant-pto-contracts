@@ -1,0 +1,108 @@
+---
+INVENTORY:
+  testnet:
+    - http://node-dev3.atlant.io:8545
+  genesis:
+    - var/chain/geth.ipc
+
+WALLETS:
+  kycOwner:
+    address: "0xee84ebaaccfd55dca9b773f5d0db7e7e5d5e04e2"
+    password: "1234"
+    keystore: "keystore/"
+    
+  kycProvider1:
+    address: "0xf86ef48734f7209054cfb563b551a11179d84e50"
+
+CONTRACTS:
+  KYC:
+    name: KYC
+    sol: contracts/KYC.sol
+    instances:
+      - &KYC_testnet
+        contract: KYC
+        address: 0x406ffb87bf17727242240b9c446ed92cd9c9b06c
+
+CALL:
+  balances:
+    wallet: .
+    method: eth_getBalance
+    params:
+      - {type: address, value: @@}
+      - latest
+
+  txInfo:
+    method: eth_getTransactionByHash
+    params:
+      - {type: string, reference: $1}
+
+  txReceipt:
+    method: eth_getTransactionReceipt
+    params:
+      - {type: string, reference: $1}
+
+VIEW:
+  kycOwner:
+    desc: "Gets the owner address of a KYC contract"
+    instance: *KYC_testnet
+    method: owner
+  
+  kycGetStatus:
+    desc: "Gets the KYC status of a target address (0 = unknown, 1 = Approved, 2 = Suspended)"
+    instance: *KYC_testnet
+    method: getStatus
+    params:
+      - {type: address, reference: $1}
+
+  kycIsProvider:
+    desc: "Checks if the provided address is authorized to perform KYC"
+    instance: *KYC_testnet
+    method: isProvider
+    params:
+      - {type: address, reference: $1}
+
+  kycCheckProviders:
+    desc: "Checks what addresses from wallets are authorized to perform KYC"
+    wallet: .
+    instance: *KYC_testnet
+    method: isProvider
+    params:
+      - {type: address, value: @@}
+
+WRITE:
+  kycDeploy:
+    desc: "Deploys a KYC contract"
+    wallet: kycOwner
+    instance: *KYC_testnet
+
+  kycRegisterProvider:
+    desc: "Adds a new 3rd-party provider that is authorized to perform KYC"
+    wallet: kycOwner
+    instance: *KYC_testnet
+    method: registerProvider
+    params:
+      - {type: address, reference: $1}
+
+  kycRemoveProvider:
+    desc: "Removes a 3rd-party provider that was authorized to perform KYC"
+    wallet: kycOwner
+    instance: *KYC_testnet
+    method: removeProvider
+    params:
+      - {type: address, reference: $1}
+
+  kycApproveAddr:
+    desc: "Sets the address status to 1 (= Approved). Can be invoked by owner or authorized KYC providers only"
+    wallet: kycOwner
+    instance: *KYC_testnet
+    method: approveAddr
+    params:
+      - {type: address, reference: $1}
+
+  kycSuspendAddr:
+    desc: "Sets the address status to 2 (= Suspended). Can be invoked by owner or authorized KYC providers only"
+    wallet: kycOwner
+    instance: *KYC_testnet
+    method: suspendAddr
+    params:
+      - {type: address, reference: $1}
