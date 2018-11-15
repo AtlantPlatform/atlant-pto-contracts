@@ -1,17 +1,16 @@
-atlant-pto-contracts
---------------------
+## atlant-pto-contracts
 
-## Dependencies
+### Dependencies
 
 * Geth (if need to test locally): https://geth.ethereum.org/downloads/ 
 * Ethereum Playbook (deploying): https://github.com/AtlantPlatform/ethereum-playbook
 * Solhint (linting): https://github.com/protofire/solhint
 
-## Deploying using Ethereum Playbook
+### Deploying using Ethereum Playbook
 
 Endpoint to see the Tx results if using `testnet` inventory group: https://ropsten.etherscan.io/
 
-```
+```bash
 $ ethereum-playbook -f playbook.testnet.yml -g testnet -h
 
 Usage: ethereum-playbook [OPTIONS] COMMAND [arg...]
@@ -45,7 +44,7 @@ Run 'ethereum-playbook COMMAND --help' for more information on a command.
 
 To deploy KYC:
 
-```
+```bash
 $ ethereum-playbook -f playbook.testnet.yml -g testnet kycDeploy
 
 INFO[0001] located keyfile by address       address=0xee84ebaaccfd55dca9b773f5d0db7e7e5d5e04e2 section=Wallets wallet=kycOwner
@@ -55,7 +54,7 @@ INFO[0003] contract deployed        address=0x406ffb87bf17727242240b9c446ed92cd9
 
 To register a KYC provider:
 
-```
+```bash
 $ ethereum-playbook -f playbook.testnet.yml -g testnet kycRegisterProvider 0xf86ef48734f7209054cfb563b551a11179d84e50
 
 "0x4f2f2a18a8365f2581316f2ab1bd53fa18e8be018aa00d778ffcbb8b9daab0c1"
@@ -68,7 +67,7 @@ $ ethereum-playbook -f playbook.testnet.yml -g testnet kycCheckProviders
 
 To alter the KYC status:
 
-```
+```bash
 $ ethereum-playbook -f playbook.testnet.yml -g testnet kycApproveAddr 0x5130df55dc8db83dd86832c947e41d1db4aa21e1
 
 "0x81b54b0d3447d1a7d00590c0d249205910be113aca5b4b643fae0abe2dcec1f2"
